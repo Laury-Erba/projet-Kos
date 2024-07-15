@@ -63,11 +63,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Utilisation des routes produitRoutes
-app.use("/api", produitRoutes);
-// Route pour la racine
-app.get("/", (req, res) => {
-  res.send("Bienvenue sur l'API des produits !");
-});
+app.use('/api', produitRoutes);
 
 // Lancement du serveur
 app.listen(port, () => {

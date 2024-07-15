@@ -4,6 +4,6 @@ import { getProducts } from "../controllers/produitsController.js";
 const router = express.Router();
 
 // Route pour récupérer tous les produits
-router.get("/", getProducts);
+router.get("/produits", getProducts);
 
 export default router;

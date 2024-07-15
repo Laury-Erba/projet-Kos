@@ -8,6 +8,9 @@ const App = () => {
         <h1>Application E-commerce</h1>
       </header>
       <main>
+        <routes>
+          <Route path="/" element={<Products />} />
+        </routes>
         <ProductList />
       </main>
       <footer>

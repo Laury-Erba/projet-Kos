@@ -10,6 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
+import cors from "cors"; // Importe le module CORS
 
 const pool = mysql.createPool({
   host: "localhost",
@@ -40,17 +41,7 @@ const upload = multer({ storage: storage });
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "votre_secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
-
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
 app.set("view options", { pretty: true });
 
 app.use(express.urlencoded({ extended: true }));
@@ -60,6 +51,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public")));
+
+// Configure CORS
+app.use(cors());
 
 app.use("/api", produitRoutes);
 app.use("/auth", authRoutes);

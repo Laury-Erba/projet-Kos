@@ -10,7 +10,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
-import cors from "cors"; // Importe le module CORS
+import cors from "cors";
+
+dotenv.config();
 
 const pool = mysql.createPool({
   host: "localhost",
@@ -22,8 +24,6 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

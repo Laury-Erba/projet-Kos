@@ -20,6 +20,20 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/api/produits/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression du produit");
+      }
+      setProducts(products.filter((product) => product.ID_produit !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression du produit : ", error);
+    }
+  };
+
   return (
     <div className="product-list">
       {products.map((product) => (
@@ -29,7 +43,10 @@ const ProductList = () => {
           <p>{product.Description}</p>
           <p>Prix : {product.Prix} €</p>
           <p>Stock : {product.Stock} unités</p>
-          <button>Voir détails</button>
+          <button onClick={() => handleDelete(product.ID_produit)}>
+            Supprimer
+          </button>
+          <button>Modifier</button>
         </div>
       ))}
     </div>

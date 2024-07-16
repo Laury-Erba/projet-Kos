@@ -1,5 +1,7 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import ProductList from "./components/ProductList";
+import AddProduct from "./components/AddProduct";
 
 const App = () => {
   return (
@@ -8,10 +10,10 @@ const App = () => {
         <h1>Application E-commerce</h1>
       </header>
       <main>
-        <routes>
-          <Route path="/" element={<Products />} />
-        </routes>
-        <ProductList />
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+          <Route path="/add-product" element={<AddProduct />} />
+        </Routes>
       </main>
       <footer>
         <p>&copy; 2024 Mon Application E-commerce</p>

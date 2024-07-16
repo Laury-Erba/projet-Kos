@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -14,25 +15,18 @@ const ProductList = () => {
         setProducts(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des produits : ", error);
+        setError(
+          "Erreur lors de la récupération des produits : " + error.message
+        ); // Enregistrer l'erreur dans le state
       }
     };
 
     fetchProducts();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`/api/produits/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Erreur lors de la suppression du produit");
-      }
-      setProducts(products.filter((product) => product.ID_produit !== id));
-    } catch (error) {
-      console.error("Erreur lors de la suppression du produit : ", error);
-    }
-  };
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="product-list">
@@ -43,10 +37,6 @@ const ProductList = () => {
           <p>{product.Description}</p>
           <p>Prix : {product.Prix} €</p>
           <p>Stock : {product.Stock} unités</p>
-          <button onClick={() => handleDelete(product.ID_produit)}>
-            Supprimer
-          </button>
-          <button>Modifier</button>
         </div>
       ))}
     </div>

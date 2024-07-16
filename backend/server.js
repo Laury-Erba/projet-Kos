@@ -55,8 +55,17 @@ app.use(express.static(path.join(__dirname, "public")));
 // Configure CORS
 app.use(cors());
 
-app.use("/api", produitRoutes);
+// Utiliser les routes API
+app.use("/api/produits", produitRoutes);
 app.use("/auth", authRoutes);
+
+// Ajouter cette ligne pour servir les fichiers statiques du build React
+app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
+
+// Pour toutes les autres routes, servir index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Serveur démarré sur le port ${port}`);

@@ -8,7 +8,7 @@ import {
   deleteProduct,
 } from "../controllers/produitsController.js";
 
-router.get("/produits", getProducts);
+router.get("/", getProducts);
 
 //router.post("/produits", addProduct);
 //router.put("/produits/:id", updateProduct);

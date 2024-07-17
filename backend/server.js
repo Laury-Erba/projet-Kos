@@ -45,8 +45,8 @@ const port = process.env.PORT || 3000;
 app.set("views", path.join(__dirname, "views"));
 app.set("view options", { pretty: true });
 //pour l'utilisation du json à la réception des données formulaire
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ limit: "10kb", extended: true }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET || "votre_secret_jwt"));
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getProducts, deleteProduct } from "../services/productService";
-import ProductForm from "../components/ProductForm";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -21,12 +21,16 @@ const ProductList = () => {
 
   return (
     <div>
-      <h1>Product List</h1>
-      <ProductForm fetchProducts={fetchProducts} />
+      <h2>Product List</h2>
       <ul>
         {products.map((product) => (
           <li key={product.ID_produits}>
-            {product.Nom} - {product.Prix}
+            <img
+              src={`http://localhost:3001/images/${product.image}`}
+              alt={product.Nom}
+              style={{ width: "100px", height: "100px" }}
+            />
+            <Link to={`/product/${product.ID_produits}`}>{product.Nom}</Link>
             <button onClick={() => handleDelete(product.ID_produits)}>
               Delete
             </button>

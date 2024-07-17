@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import mysql from "mysql2/promise";
 import produitRoutes from "./routes/produitRoutes.js";
@@ -5,7 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import bodyParser from "body-parser";
+import bodyParser from "body-parser"; // Assurez-vous que c'est importé une seule fois
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -43,9 +44,10 @@ const port = process.env.PORT || 3000;
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view options", { pretty: true });
-
-app.use(express.urlencoded({ extended: true }));
+//pour l'utilisation du json à la réception des données formulaire
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser(process.env.COOKIE_SECRET || "votre_secret_jwt"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

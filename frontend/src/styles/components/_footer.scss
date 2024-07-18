@@ -3,6 +3,9 @@
     color: $white-color;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   
     .footer-content {
       @include flex-center;
@@ -15,6 +18,9 @@
       a {
         color: $white-color;
         text-decoration: none;
+        margin-right: 15px;
+        padding-bottom: 15px;
+
         &:hover {
           text-decoration: underline;
         }

@@ -3,14 +3,15 @@ import ProductList from "../components/ProductList";
 import HeaderHome from "../components/HeaderHome";
 import About from "../components/About";
 import Lorem from "../components/Lorem";
+import "../styles/pages/_home.scss";
 
 const Home = () => {
   return (
-    <div>
+    <div className="home">
       <HeaderHome />
       <main>
-        <ProductList />
         <About />
+        <ProductList />
         <Lorem />
       </main>
     </div>

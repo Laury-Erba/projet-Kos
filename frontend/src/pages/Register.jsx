@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { registerUser } from "../services/authService"; // Importer le service
+import "../styles/pages/_register.scss"; // Importer les styles
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -33,9 +34,10 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Inscription</h2>
+    <form className="register-form" onSubmit={handleSubmit}>
+      <h2 className="form-title">Inscription</h2>
       <input
+        className="form-input"
         type="text"
         name="Nom"
         placeholder="Nom"
@@ -44,6 +46,7 @@ const Register = () => {
         required
       />
       <input
+        className="form-input"
         type="text"
         name="Prenom"
         placeholder="Prenom"
@@ -52,6 +55,7 @@ const Register = () => {
         required
       />
       <input
+        className="form-input"
         type="email"
         name="Email"
         placeholder="Email"
@@ -60,6 +64,7 @@ const Register = () => {
         required
       />
       <input
+        className="form-input"
         type="password"
         name="Mot_de_passe"
         placeholder="Mot de passe"
@@ -68,6 +73,7 @@ const Register = () => {
         required
       />
       <input
+        className="form-input"
         type="text"
         name="Adresse_de_livraison"
         placeholder="Adresse de livraison"
@@ -76,7 +82,9 @@ const Register = () => {
         required
       />
       <input type="hidden" name="role" value={formData.role} />
-      <button type="submit">S'inscrire</button>
+      <button className="form-button" type="submit">
+        S'inscrire
+      </button>
     </form>
   );
 };

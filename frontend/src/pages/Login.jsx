@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../services/authService"; // Importer le service
 import { CartContext } from "../context/CartContext"; // Assuming CartContext holds user state as well
+import "../styles/pages/_login.scss"; // Importer les styles
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,10 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/login",
-        formData
-      );
+      const response = await loginUser(formData);
       setUser(response.data); // Assuming you have a setUser method in your context
       alert("Connexion réussie");
       navigate("/"); // Redirect to home or dashboard
@@ -35,9 +33,10 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Connexion</h2>
+    <form className="login-form" onSubmit={handleSubmit}>
+      <h2 className="form-title">Connexion</h2>
       <input
+        className="form-input"
         type="email"
         name="Email"
         placeholder="Email"
@@ -46,6 +45,7 @@ const Login = () => {
         required
       />
       <input
+        className="form-input"
         type="password"
         name="Mot_de_passe"
         placeholder="Mot de passe"
@@ -53,7 +53,9 @@ const Login = () => {
         onChange={handleChange}
         required
       />
-      <button type="submit">Se connecter</button>
+      <button className="form-button" type="submit">
+        Se connecter
+      </button>
     </form>
   );
 };

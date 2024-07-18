@@ -1,6 +1,6 @@
 .nav-bar {
-    background-color: $black-color;
-    color: $white-color;
+    background-color: $secondary-color;
+    color: $black-color;
   
     ul {
       list-style: none;
@@ -10,11 +10,14 @@
       }
       a {
         text-decoration: none;
-        color: $white-color;
+        color: $black-color;
         &:hover {
           text-decoration: underline;
         }
       }
+    }
+    .logo{
+      font-size: 40px;
     }
   }
   

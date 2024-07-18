@@ -1,0 +1,45 @@
+@import '../utils/variables';
+
+.login-form {
+  background-color: $secondary-color;
+  padding: 20px;
+  margin-top: 140px!important;
+  margin-bottom: 140px!important;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .form-title {
+    font-family: $title-font;
+    color: $primary-color;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid $primary-color;
+    border-radius: 4px;
+    font-family: $paragraph-font;
+    color: $black-color;
+  }
+
+  .form-button {
+    width: 100%;
+    padding: 10px;
+    background-color: $primary-color;
+    color: $white-color;
+    border: none;
+    border-radius: 4px;
+    font-family: $paragraph-font;
+    cursor: pointer;
+    text-transform: uppercase;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

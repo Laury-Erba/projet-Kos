@@ -7,6 +7,7 @@ const HeaderHome = () => {
       <img
         src="/public/images/header-home.webp"
         alt="Header image collection KOS"
+        className="header-image"
       />
       <h1>Découvrez notre nouvelle collection Kos'</h1>
       <Link to="/shop">

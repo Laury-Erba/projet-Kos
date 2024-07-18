@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../services/productService";
+import { CartContext } from "../context/CartContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     fetchProduct();
@@ -13,16 +15,10 @@ const ProductDetail = () => {
   const fetchProduct = async () => {
     try {
       const response = await getProductById(id);
-      console.log(response.data); // Ajoutez cette ligne pour vérifier la réponse
       setProduct(response.data);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
-  };
-
-  const handleAddToCart = () => {
-    // Logique pour ajouter le produit au panier
-    console.log(`Product ${product.Nom} added to cart.`);
   };
 
   if (!product) return <div>Loading...</div>;
@@ -38,7 +34,7 @@ const ProductDetail = () => {
       <p>{product.Description}</p>
       <p>Prix: {product.Prix} €</p>
       <p>Stock: {product.Stock}</p>
-      <button onClick={handleAddToCart}>Add to Cart</button>
+      <button onClick={() => addToCart(product)}>Add to Cart</button>
     </div>
   );
 };

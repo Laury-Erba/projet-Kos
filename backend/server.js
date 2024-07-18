@@ -59,7 +59,7 @@ app.use(cors());
 
 // Utiliser les routes API
 app.use("/api/produits", produitRoutes);
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 // Ajouter cette ligne pour servir les fichiers statiques du build React
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));

@@ -22,6 +22,12 @@ const NavBar = () => {
         <li>
           <a href="#products">Products</a>
         </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
       </ul>
       <Link to="/cart" className="cart-icon">
         <FontAwesomeIcon icon={faShoppingCart} size="2x" />

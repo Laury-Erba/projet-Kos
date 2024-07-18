@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getProducts, deleteProduct } from "../services/productService";
+import { getProducts } from "../services/productService";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -25,15 +25,6 @@ const ProductList = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteProduct(id);
-      fetchProducts();
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
-  };
-
   if (!Array.isArray(products)) {
     return <div>Loading...</div>;
   }
@@ -50,9 +41,9 @@ const ProductList = () => {
               style={{ width: "100px", height: "100px" }}
             />
             <Link to={`/product/${product.ID_produit}`}>{product.Nom}</Link>
-            <button onClick={() => handleDelete(product.ID_produit)}>
-              Delete
-            </button>
+            <Link to={`/product/${product.ID_produit}`}>
+              <button>Shop</button>
+            </Link>
           </li>
         ))}
       </ul>

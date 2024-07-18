@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import { CartContext } from "../context/CartContext";
+import ProductList from "../components/ProductList"; // Importer le composant ProductList
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -25,16 +26,22 @@ const ProductDetail = () => {
 
   return (
     <div>
-      <h2>{product.Nom}</h2>
-      <img
-        src={`http://localhost:3001/images/${product.image}`}
-        alt={product.Nom}
-        style={{ width: "200px", height: "200px" }}
-      />
-      <p>{product.Description}</p>
-      <p>Prix: {product.Prix} €</p>
-      <p>Stock: {product.Stock}</p>
-      <button onClick={() => addToCart(product)}>Add to Cart</button>
+      <div className="product-detail">
+        <h2>{product.Nom}</h2>
+        <img
+          src={`http://localhost:3001/images/${product.image}`}
+          alt={product.Nom}
+          style={{ width: "200px", height: "200px" }}
+        />
+        <p>{product.Description}</p>
+        <p>Prix: {product.Prix} €</p>
+        <p>Stock: {product.Stock}</p>
+        <button onClick={() => addToCart(product)}>Add to Cart</button>
+      </div>
+      <div className="product-list">
+        <h2>Other Products</h2>
+        <ProductList />
+      </div>
     </div>
   );
 };

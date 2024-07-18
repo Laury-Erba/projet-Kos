@@ -36,7 +36,7 @@ const ProductDetail = () => {
         style={{ width: "200px", height: "200px" }}
       />
       <p>{product.Description}</p>
-      <p>Price: {product.Prix} €</p>
+      <p>Prix: {product.Prix} €</p>
       <p>Stock: {product.Stock}</p>
       <button onClick={handleAddToCart}>Add to Cart</button>
     </div>

@@ -1,0 +1,15 @@
+// Mixin for flexbox centering
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  // Mixin for responsive typography
+  @mixin responsive-font-size($mobile-size, $desktop-size) {
+    font-size: $mobile-size;
+    @media(min-width: 768px) {
+      font-size: $desktop-size;
+    }
+  }
+  

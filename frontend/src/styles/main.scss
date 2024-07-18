@@ -1,0 +1,15 @@
+// Import utils
+@import 'utils/variables';
+@import 'utils/mixins';
+
+// Import base styles
+@import 'base/reset';
+@import 'base/typography';
+
+// Import components
+@import 'components/navbar';
+@import 'components/footer';
+@import 'components/productList';
+
+// Import pages
+@import 'pages/home';

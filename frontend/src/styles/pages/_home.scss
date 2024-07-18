@@ -1,0 +1,44 @@
+.home {
+    .header-home {
+      text-align: center;
+      margin-bottom: 20px;
+  
+      img {
+        width: 100%;
+        height: auto;
+      }
+  
+      h1 {
+        @include responsive-font-size(1.5rem, 2.5rem);
+        margin-top: -20px;
+        color: $primary-color;
+      }
+  
+      .shop-button {
+        background-color: $primary-color;
+        color: $white-color;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        text-transform: uppercase;
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+  
+    .about,
+    .lorem {
+      @include flex-center;
+      flex-direction: column;
+      text-align: center;
+      margin: 20px 0;
+  
+      img {
+        width: 80%;
+        height: auto;
+        margin-top: 10px;
+      }
+    }
+  }
+  

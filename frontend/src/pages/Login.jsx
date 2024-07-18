@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService"; // Importer le service
+import { loginUser } from "../services/authService"; // Assurez-vous que le chemin est correct
 import { CartContext } from "../context/CartContext"; // Assuming CartContext holds user state as well
 import "../styles/pages/_login.scss"; // Importer les styles
 

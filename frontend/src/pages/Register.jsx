@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registerUser } from "../services/authService"; // Importer le service
+import { registerUser } from "../services/authService"; // Assurez-vous que le chemin est correct
 import "../styles/pages/_register.scss"; // Importer les styles
 
 const Register = () => {
@@ -22,10 +22,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
-        formData
-      );
+      const response = await registerUser(formData);
       alert("Inscription réussie");
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);

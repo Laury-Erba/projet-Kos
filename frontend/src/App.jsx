@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import { CartProvider } from "./context/CartContext";
 import Cart from "./pages/Cart";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <Footer />
       </Router>

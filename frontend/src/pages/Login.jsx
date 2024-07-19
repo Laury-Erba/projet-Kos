@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService"; // Assurez-vous que le chemin est correct
-import { CartContext } from "../context/CartContext"; // Assuming CartContext holds user state as well
-import "../styles/pages/_login.scss"; // Importer les styles
+import { loginUser } from "../services/authService";
+import { CartContext } from "../context/CartContext";
+import "../styles/pages/_login.scss";
 
 const Login = () => {
   const [formData, setFormData] = useState({

@@ -2,7 +2,9 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import { CartContext } from "../context/CartContext";
-import ProductList from "../components/ProductList"; // Importer le composant ProductList
+import ProductList from "../components/ProductList";
+import Lorem from "../components/Lorem";
+import "../styles/pages/_product-detail.scss";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -41,6 +43,9 @@ const ProductDetail = () => {
       <div className="product-list">
         <h2>Other Products</h2>
         <ProductList />
+      </div>
+      <div className="Lorem">
+        <Lorem />
       </div>
     </div>
   );

@@ -4,11 +4,11 @@ import mysql from "mysql2/promise";
 
 // Connexion à la base de données
 const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  port: 8889,
-  password: "root",
-  database: "Kos",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.DB_PORT,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -16,6 +16,9 @@ const pool = mysql.createPool({
 
 // Fonction utilitaire pour générer un token JWT
 function generateToken(userData) {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined");
+  }
   return jwt.sign(
     {
       id: userData.ID,
@@ -50,16 +53,23 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(Mot_de_passe, 10);
 
     // Insertion du nouvel utilisateur dans la base de données
-    await connection.query(
+    const [result] = await connection.query(
       "INSERT INTO Users (Nom, Prenom, Email, Mot_de_passe, Adresse_de_livraison, role) VALUES (?, ?, ?, ?, ?, ?)",
       [Nom, Prenom, Email, hashedPassword, Adresse_de_livraison, role]
     );
 
     connection.release();
-    res.status(201).json({ message: "Inscription réussie." });
+
+    if (result.affectedRows === 1) {
+      res.status(201).json({ message: "Inscription réussie." });
+    } else {
+      res.status(500).json({ message: "Erreur lors de l'inscription." });
+    }
   } catch (error) {
-    console.error("Erreur :", error);
-    res.status(500).json({ message: "Erreur lors de l'inscription." });
+    console.error("Erreur lors de l'inscription :", error);
+    res
+      .status(500)
+      .json({ message: "Erreur lors de l'inscription.", error: error.message });
   }
 };
 
@@ -77,27 +87,33 @@ export const loginUser = async (req, res) => {
     );
 
     if (results.length === 0) {
+      console.log("Utilisateur non trouvé :", Email);
       connection.release();
       return res.status(404).json({ message: "Utilisateur non trouvé." });
     }
 
     const user = results[0];
+    console.log("Utilisateur trouvé :", user);
 
     // Vérification du mot de passe
     const passwordMatch = await bcrypt.compare(Mot_de_passe, user.Mot_de_passe);
 
     if (!passwordMatch) {
+      console.log("Mot de passe incorrect pour l'utilisateur :", Email);
       connection.release();
       return res.status(401).json({ message: "Mot de passe incorrect." });
     }
 
     // Génération du token JWT
     const token = generateToken(user);
+    console.log("Token généré pour l'utilisateur :", user);
 
     connection.release();
     res.status(200).json({ token });
   } catch (error) {
     console.error("Erreur lors de la connexion :", error);
-    res.status(500).json({ message: "Erreur lors de la connexion." });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la connexion.", error: error.message });
   }
 };

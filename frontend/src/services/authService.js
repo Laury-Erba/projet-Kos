@@ -35,4 +35,5 @@ const handleError = (error) => {
     console.error("Error in setting up request:", error.message);
   }
   console.error("Config:", error.config);
+  throw error; // Rejeter l'erreur pour la propager au niveau supérieur
 };

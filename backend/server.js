@@ -6,12 +6,14 @@ import authRoutes from "./routes/authRoutes.js";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import bodyParser from "body-parser"; // Assurez-vous que c'est importé une seule fois
+import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
 import cors from "cors";
+import { authenticateToken } from "./controllers/authMiddleware.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
@@ -42,6 +44,13 @@ const upload = multer({ storage: storage });
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Vérifiez que JWT_SECRET est bien chargé
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET is not defined in the environment variables.");
+} else {
+  console.log("JWT_SECRET is defined.");
+}
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view options", { pretty: true });
 //pour l'utilisation du json à la réception des données formulaire
@@ -60,6 +69,7 @@ app.use(cors());
 // Utiliser les routes API
 app.use("/api/produits", produitRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", authenticateToken, adminRoutes);
 
 // Ajouter cette ligne pour servir les fichiers statiques du build React
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));

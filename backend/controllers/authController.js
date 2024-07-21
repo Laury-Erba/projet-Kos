@@ -4,11 +4,11 @@ import mysql from "mysql2/promise";
 
 // Connexion à la base de données
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  port: process.env.DB_PORT,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: "localhost",
+  user: "root",
+  port: 8889,
+  password: "root",
+  database: "Kos",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -16,9 +16,6 @@ const pool = mysql.createPool({
 
 // Fonction utilitaire pour générer un token JWT
 function generateToken(userData) {
-  if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined");
-  }
   return jwt.sign(
     {
       id: userData.ID,

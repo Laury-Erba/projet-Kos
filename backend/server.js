@@ -1,13 +1,12 @@
-// server.js
 import express from "express";
 import mysql from "mysql2/promise";
 import produitRoutes from "./routes/produitRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import multer from "multer";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import bodyParser from "body-parser";
 import path from "path";
+import Stripe from "stripe";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
@@ -16,6 +15,14 @@ import { authenticateToken } from "./controllers/authMiddleware.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
+
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PORT:", process.env.DB_PORT);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+console.log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY);
 
 const pool = mysql.createPool({
   host: "localhost",
@@ -30,6 +37,8 @@ const pool = mysql.createPool({
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -71,12 +80,36 @@ app.use("/api/produits", produitRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", authenticateToken, adminRoutes);
 
-// Ajouter cette ligne pour servir les fichiers statiques du build React
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 
 // Pour toutes les autres routes, servir index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
+});
+
+app.post("/create-checkout-session", async (req, res) => {
+  const { items } = req.body;
+
+  const line_items = items.map((item) => ({
+    price_data: {
+      currency: "usd",
+      product_data: {
+        name: item.name,
+      },
+      unit_amount: item.price * 100, // Convert to cents
+    },
+    quantity: item.quantity,
+  }));
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items,
+    mode: "payment",
+    success_url: "http://localhost:3000/success",
+    cancel_url: "http://localhost:3000/cancel",
+  });
+
+  res.json({ id: session.id });
 });
 
 app.listen(port, () => {

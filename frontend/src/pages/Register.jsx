@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { registerUser } from "../services/authService"; // Assurez-vous que le chemin est correct
-import "../styles/pages/_register.scss"; // Importer les styles
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../services/authService";
+import "../styles/pages/_register.scss";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
     Adresse_de_livraison: "",
     role: "client", // Par défaut, rôle client
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -23,7 +25,9 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await registerUser(formData);
+      console.log("Register response:", response); // Ajoutez cette ligne
       alert("Inscription réussie");
+      navigate("/login"); // Rediriger vers la page de connexion
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);
       alert("Erreur lors de l'inscription");

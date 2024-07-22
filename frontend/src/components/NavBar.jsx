@@ -1,42 +1,40 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import "../styles/components/_navbar.scss";
 
 const NavBar = () => {
-  const { cart } = useContext(CartContext);
+  const { user, setUser } = useContext(CartContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
-    <nav className="nav-bar">
-      <ul>
-        <li>
-          <a href="#about">About</a>
-        </li>
-        <li>
-          <a href="#lorem">Lorem</a>
-        </li>
-        <li>
-          <a href="#products">Products</a>
-        </li>
-        <li className="logo">
-          <Link to="/">Kos'</Link>
-        </li>
-        <li>
-          <Link to="/register">Register</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-        <li>
-          <Link to="/cart" className="cart-icon">
-            <FontAwesomeIcon icon={faShoppingCart} size="2x" />
-            {cart.length > 0 && (
-              <span className="cart-count">{cart.length}</span>
-            )}
-          </Link>
-        </li>
-      </ul>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-brand">
+          My E-Commerce
+        </Link>
+        <div className="navbar-links">
+          <Link to="/cart">Cart</Link>
+          {user ? (
+            <>
+              {user.role === "admin" && <Link to="/dashboard">Dashboard</Link>}
+              <Link to="/account">Mon Compte</Link>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };

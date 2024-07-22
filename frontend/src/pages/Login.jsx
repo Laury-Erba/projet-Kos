@@ -23,9 +23,16 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await loginUser(formData);
-      setUser(response.data); // Assuming you have a setUser method in your context
-      alert("Connexion réussie");
-      navigate("/"); // Redirect to home or dashboard
+      console.log("Login response:", response); // Ajoutez cette ligne
+      if (response && response.token) {
+        setUser(response); // Assuming you have a setUser method in your context
+        localStorage.setItem("token", response.token); // Store the token in local storage
+        alert("Connexion réussie");
+        navigate("/dashboard"); // Redirect to dashboard
+      } else {
+        console.error("Invalid login response:", response);
+        alert("Erreur lors de la connexion");
+      }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
       alert("Erreur lors de la connexion");

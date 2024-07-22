@@ -1,3 +1,6 @@
+@import '../utils/variables';
+@import '../utils/mixins';
+
 .nav-bar {
     background-color: $secondary-color;
     color: $black-color;

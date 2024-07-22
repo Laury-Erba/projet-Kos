@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/auth";
+const API_URL = "http://localhost:3001/api/auth"; // Corriger le port ici si nécessaire
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -9,19 +9,23 @@ const axiosInstance = axios.create({
   },
 });
 
-export const registerUser = async (userData) => {
+export const registerUser = async (formData) => {
   try {
-    return await axiosInstance.post("/register", userData);
+    const response = await axiosInstance.post("/register", formData);
+    return response.data;
   } catch (error) {
     handleError(error);
+    throw error; // Rejeter l'erreur pour que le composant puisse la gérer
   }
 };
 
-export const loginUser = async (userData) => {
+export const loginUser = async (formData) => {
   try {
-    return await axiosInstance.post("/login", userData);
+    const response = await axiosInstance.post("/login", formData);
+    return response.data;
   } catch (error) {
     handleError(error);
+    throw error; // Rejeter l'erreur pour que le composant puisse la gérer
   }
 };
 
@@ -35,5 +39,4 @@ const handleError = (error) => {
     console.error("Error in setting up request:", error.message);
   }
   console.error("Config:", error.config);
-  throw error; // Rejeter l'erreur pour la propager au niveau supérieur
 };

@@ -1,8 +1,8 @@
+// backend/controllers/authController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mysql from "mysql2/promise";
 
-// Connexion à la base de données
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",

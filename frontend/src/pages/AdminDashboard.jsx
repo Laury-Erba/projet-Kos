@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Chart } from "react-google-charts";
-import { updateProduct } from "../services/productService"; // Importer la fonction updateProduct
+import { updateProduct } from "../services/productService";
 import "../styles/pages/_dashboard.scss";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const [userData, setUserData] = useState(null);
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
@@ -150,7 +150,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container mt-5">
-      <h1>Dashboard</h1>
+      <h1>Admin Dashboard</h1>
       <div className="card mt-3">
         <div className="card-body">
           <h5 className="card-title">User Information</h5>
@@ -257,4 +257,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

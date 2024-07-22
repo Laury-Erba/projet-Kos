@@ -1,10 +1,11 @@
+// NavBar.jsx
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import "../styles/components/_navbar.scss";
 
 const NavBar = () => {
-  const { user, setUser } = useContext(CartContext);
+  const { user, setUser, cartItems } = useContext(CartContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,17 +21,18 @@ const NavBar = () => {
           My E-Commerce
         </Link>
         <div className="navbar-links">
-          <Link to="/cart">Cart</Link>
+          <Link to="/cart" className="cart-icon">
+            <span className="cart-count">{cartItems.length}</span>
+          </Link>
           {user ? (
             <>
               {user.role === "admin" && <Link to="/dashboard">Dashboard</Link>}
-              <Link to="/account">Mon Compte</Link>
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={handleLogout}>Déconnexion</button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <Link to="/login">Connexion</Link>
+              <Link to="/register">Inscription</Link>
             </>
           )}
         </div>

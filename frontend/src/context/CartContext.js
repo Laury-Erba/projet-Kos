@@ -1,22 +1,25 @@
+// context/CartContext.js
 import React, { createContext, useState } from "react";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
 
   const addToCart = (product) => {
-    setCart([...cart, product]);
+    setCartItems((prevItems) => [...prevItems, product]);
   };
 
-  const removeFromCart = (id) => {
-    setCart(cart.filter((product) => product.ID_produit !== id));
+  const removeFromCart = (productId) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.ID_produit !== productId)
+    );
   };
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, user, setUser }}
+      value={{ cartItems, addToCart, removeFromCart, user, setUser }}
     >
       {children}
     </CartContext.Provider>

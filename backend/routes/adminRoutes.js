@@ -1,10 +1,13 @@
+// backend/routes/adminRoutes.js
 import express from "express";
-import { authenticateToken } from "../controllers/authMiddleware.js";
+import { updateUserRole } from "../controllers/adminController.js";
+import {
+  authenticateToken,
+  authorizeAdmin,
+} from "../controllers/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/user", authenticateToken, (req, res) => {
-  res.json(req.user);
-});
+router.put("/user/role", authenticateToken, authorizeAdmin, updateUserRole);
 
 export default router;

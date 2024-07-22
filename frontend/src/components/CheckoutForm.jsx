@@ -1,3 +1,4 @@
+// CheckoutForm.jsx
 import React, { useContext } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
@@ -23,7 +24,7 @@ const CheckoutForm = () => {
       try {
         const { id } = paymentMethod;
         const response = await axios.post(
-          "http://localhost:3000/create-checkout-session",
+          "http://localhost:3001/create-checkout-session",
           {
             items: cart,
             id,

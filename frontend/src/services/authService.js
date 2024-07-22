@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001/api/auth"; // Corriger le port ici si nécessaire
+const API_URL = "http://localhost:3001/api/auth";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -11,21 +11,23 @@ const axiosInstance = axios.create({
 
 export const registerUser = async (formData) => {
   try {
-    const response = await axiosInstance.post("/register", formData);
+    const response = await axios.post(`${API_URL}/register`, formData);
     return response.data;
   } catch (error) {
     handleError(error);
-    throw error; // Rejeter l'erreur pour que le composant puisse la gérer
   }
 };
 
 export const loginUser = async (formData) => {
   try {
-    const response = await axiosInstance.post("/login", formData);
+    const response = await axios.post(`${API_URL}/login`, formData);
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role); // Stocker le rôle
+    }
     return response.data;
   } catch (error) {
     handleError(error);
-    throw error; // Rejeter l'erreur pour que le composant puisse la gérer
   }
 };
 

@@ -1,3 +1,4 @@
+// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -6,12 +7,14 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import AdminLogin from "./pages/AdminLogin";
-import { CartProvider } from "./context/CartContext";
+import Dashboard from "./pages/AdminDashboard";
 import Cart from "./pages/Cart";
-import Dashboard from "./pages/Dashboard";
-import CheckoutForm from "./components/CheckoutForm";
-import ProtectedRoute from "./components/ProtectedRoute";
+import CheckoutForm from "./components/CheckoutForm"; // Assurez-vous d'importer votre composant CheckoutForm
+import { CartProvider } from "./context/CartContext";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("your-publishable-key-here"); // Remplacez par votre clé publique
 
 const App = () => {
   return (
@@ -24,16 +27,15 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route
-            path="/dashboard"
+            path="/checkout"
             element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
+              <Elements stripe={stripePromise}>
+                <CheckoutForm />
+              </Elements>
             }
           />
-          <Route path="/checkout" element={<CheckoutForm />} />
         </Routes>
         <Footer />
       </Router>

@@ -1,6 +1,7 @@
-// NavBar.jsx
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import { CartContext } from "../context/CartContext";
 import "../styles/components/_navbar.scss";
 
@@ -21,7 +22,9 @@ const NavBar = () => {
           Kos'
         </Link>
         <div className="navbar-links">
+          <a href="#about">About</a>
           <Link to="/cart" className="cart-icon">
+            <FontAwesomeIcon icon={faShoppingCart} />
             <span className="cart-count">{cartItems.length}</span>
           </Link>
           {user ? (
@@ -31,7 +34,9 @@ const NavBar = () => {
             </>
           ) : (
             <>
-              <Link to="/login">Connexion</Link>
+              <Link to="/login">
+                <FontAwesomeIcon icon={faUser} /> Connexion
+              </Link>
               <Link to="/register">Inscription</Link>
             </>
           )}

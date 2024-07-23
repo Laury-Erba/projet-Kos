@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Chart } from "react-google-charts";
-import { updateProduct } from "../services/productService";
+import {
+  addProduct,
+  updateProduct,
+  deleteProduct,
+} from "../services/productService";
 import "../styles/pages/_dashboard.scss";
 
 const AdminDashboard = () => {
@@ -81,11 +85,7 @@ const AdminDashboard = () => {
         setEditMode(false);
         setEditProductId(null);
       } else {
-        await axios.post("http://localhost:3001/api/produits", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await addProduct(data);
         alert("Produit ajouté avec succès.");
       }
 
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/produits/${id}`);
+      await deleteProduct(id);
       setProducts(products.filter((product) => product.ID_produit !== id));
       alert("Produit supprimé avec succès.");
     } catch (error) {
@@ -151,106 +151,110 @@ const AdminDashboard = () => {
   return (
     <div className="dashboard-container mt-5">
       <h1>Admin Dashboard</h1>
-      <div className="card mt-3">
-        <div className="card-body">
-          <h5 className="card-title">User Information</h5>
-          <p className="card-text">
-            <strong>Name:</strong> {userData.Nom} {userData.Prenom}
-          </p>
-          <p className="card-text">
-            <strong>Email:</strong> {userData.Email}
-          </p>
+      <div className="card-row">
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">User Information</h5>
+            <p className="card-text">
+              <strong>Name:</strong> {userData.Nom} {userData.Prenom}
+            </p>
+            <p className="card-text">
+              <strong>Email:</strong> {userData.Email}
+            </p>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Ventes KOS'</h5>
+            <Chart
+              chartType="PieChart"
+              data={data}
+              options={options}
+              width="100%"
+              height="400px"
+            />
+          </div>
         </div>
       </div>
-      <div className="card mt-3">
-        <div className="card-body">
-          <h5 className="card-title">Ventes KOS'</h5>
-          <Chart
-            chartType="PieChart"
-            data={data}
-            options={options}
-            width="100%"
-            height="400px"
-          />
-        </div>
-      </div>
-      <div className="card mt-3">
-        <div className="card-body">
-          <h5 className="card-title">
-            {editMode ? "Modifier le Produit" : "Ajouter un Produit"}
-          </h5>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Nom</label>
-              <input
-                type="text"
-                name="Nom"
-                value={formData.Nom}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea
-                name="Description"
-                value={formData.Description}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Prix</label>
-              <input
-                type="number"
-                name="Prix"
-                value={formData.Prix}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Stock</label>
-              <input
-                type="number"
-                name="Stock"
-                value={formData.Stock}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Image</label>
-              <input type="file" name="image" onChange={handleFileChange} />
-            </div>
-            <button type="submit">
-              {editMode ? "Mettre à jour" : "Ajouter"}
-            </button>
-          </form>
-        </div>
-      </div>
-      <div className="card mt-3">
-        <div className="card-body">
-          <h5 className="card-title">Liste des Produits</h5>
-          <ul>
-            {products.map((product) => (
-              <li key={product.ID_produit}>
-                <img
-                  src={`http://localhost:3001/images/${product.image}`}
-                  alt={product.Nom}
-                  style={{ width: "100px", height: "100px" }}
+      <div className="card-row">
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">
+              {editMode ? "Modifier le Produit" : "Ajouter un Produit"}
+            </h5>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Nom</label>
+                <input
+                  type="text"
+                  name="Nom"
+                  value={formData.Nom}
+                  onChange={handleChange}
+                  required
                 />
-                <h3>{product.Nom}</h3>
-                <p>{product.Description}</p>
-                <p>{product.Prix} €</p>
-                <p>Stock: {product.Stock}</p>
-                <button onClick={() => editProduct(product)}>Modifier</button>
-                <button onClick={() => deleteProduct(product.ID_produit)}>
-                  Supprimer
-                </button>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  name="Description"
+                  value={formData.Description}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Prix</label>
+                <input
+                  type="number"
+                  name="Prix"
+                  value={formData.Prix}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Stock</label>
+                <input
+                  type="number"
+                  name="Stock"
+                  value={formData.Stock}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Image</label>
+                <input type="file" name="image" onChange={handleFileChange} />
+              </div>
+              <button type="submit">
+                {editMode ? "Mettre à jour" : "Ajouter"}
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Liste des Produits</h5>
+            <ul>
+              {products.map((product) => (
+                <li key={product.ID_produit}>
+                  <img
+                    src={`http://localhost:3001/images/${product.image}`}
+                    alt={product.Nom}
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                  <h3>{product.Nom}</h3>
+                  <p>{product.Description}</p>
+                  <p>{product.Prix} €</p>
+                  <p>Stock: {product.Stock}</p>
+                  <button onClick={() => editProduct(product)}>Modifier</button>
+                  <button onClick={() => deleteProduct(product.ID_produit)}>
+                    Supprimer
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

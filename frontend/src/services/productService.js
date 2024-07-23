@@ -4,9 +4,6 @@ const API_URL = "http://localhost:3001/api/produits";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 export const getProducts = async () => {
@@ -27,7 +24,11 @@ export const getProductById = async (id) => {
 
 export const addProduct = async (product) => {
   try {
-    return await axiosInstance.post("/", product);
+    return await axiosInstance.post("/", product, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   } catch (error) {
     handleError(error);
   }
@@ -35,7 +36,11 @@ export const addProduct = async (product) => {
 
 export const updateProduct = async (id, product) => {
   try {
-    return await axiosInstance.put(`/${id}`, product);
+    return await axiosInstance.put(`/${id}`, product, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   } catch (error) {
     handleError(error);
   }

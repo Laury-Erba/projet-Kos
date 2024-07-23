@@ -5,12 +5,14 @@
   background-color: $secondary-color;
   color: $black-color;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+   align-items: center;
 
   .navbar-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    justify-content: center;
+     align-items: center;
     .navbar-brand {
       font-size: 24px;
       font-weight: bold;
@@ -60,4 +62,11 @@
       }
     }
   }
+}
+@media (min-width: 768px) {
+  
+}
+
+@media (min-width: 1024px) {
+  
 }

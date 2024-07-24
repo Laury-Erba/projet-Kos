@@ -1,6 +1,24 @@
+@import '../utils/variables'; 
+@import '../utils/mixins'; 
 .product-detail{
     margin-top: 150px;
     margin-bottom: 150px;
     justify-content: center;
     text-align: center;
+
+    button {
+    justify-content: center;
+        bottom: 20px;
+        display: iline;
+        background-color: $primary-color;
+        color: $white-color;
+        border: none;
+        margin-top: 34px;
+        padding: 10px 20px;
+        cursor: pointer;
+        text-transform: uppercase;
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
 }

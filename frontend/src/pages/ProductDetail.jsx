@@ -44,9 +44,6 @@ const ProductDetail = () => {
         <h2>Other Products</h2>
         <ProductList />
       </div>
-      <div className="Lorem">
-        <Lorem />
-      </div>
     </div>
   );
 };

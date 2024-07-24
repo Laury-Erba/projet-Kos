@@ -6,6 +6,15 @@ const axiosInstance = axios.create({
   baseURL: API_URL,
 });
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export const getProducts = async () => {
   try {
     return await axiosInstance.get("/");
@@ -25,6 +34,7 @@ export const getProductById = async (id) => {
 export const addProduct = async (product) => {
   try {
     return await axiosInstance.post("/", product, {
+      ...getAuthHeaders(),
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -37,6 +47,7 @@ export const addProduct = async (product) => {
 export const updateProduct = async (id, product) => {
   try {
     return await axiosInstance.put(`/${id}`, product, {
+      ...getAuthHeaders(),
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -48,7 +59,7 @@ export const updateProduct = async (id, product) => {
 
 export const deleteProduct = async (id) => {
   try {
-    return await axiosInstance.delete(`/${id}`);
+    return await axiosInstance.delete(`/${id}`, getAuthHeaders());
   } catch (error) {
     handleError(error);
   }

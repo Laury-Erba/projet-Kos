@@ -1,4 +1,3 @@
-// backend/controllers/produitsController.js
 import mysql from "mysql2/promise";
 
 const pool = mysql.createPool({
@@ -52,7 +51,8 @@ export const getProductById = async (req, res) => {
 
 // Ajouter un produit
 export const addProduct = async (req, res) => {
-  const { Nom, Description, Prix, Stock, image } = req.body;
+  const { Nom, Description, Prix, Stock } = req.body;
+  const image = req.file ? req.file.filename : null;
   try {
     const connection = await pool.getConnection();
     await connection.query(
@@ -72,7 +72,8 @@ export const addProduct = async (req, res) => {
 // Mettre à jour un produit
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { Nom, Description, Prix, Stock, image } = req.body;
+  const { Nom, Description, Prix, Stock } = req.body;
+  const image = req.file ? req.file.filename : null;
   try {
     const connection = await pool.getConnection();
     await connection.query(

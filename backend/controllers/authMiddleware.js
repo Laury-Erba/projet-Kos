@@ -1,6 +1,5 @@
 // backend/controllers/authMiddleware.js
 import jwt from "jsonwebtoken";
-import mysql from "mysql2/promise";
 import { pool } from "../server.js"; // Assurez-vous que le pool est importé correctement
 
 export const authenticateToken = (req, res, next) => {

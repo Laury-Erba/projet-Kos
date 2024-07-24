@@ -1,4 +1,3 @@
-// backend/routes/adminRoutes.js
 import express from "express";
 import { updateUserRole } from "../controllers/adminController.js";
 import {
@@ -8,6 +7,6 @@ import {
 
 const router = express.Router();
 
-router.put("/user/role", authenticateToken, authorizeAdmin, updateUserRole);
+router.put("/role/:id", authenticateToken, authorizeAdmin, updateUserRole);
 
 export default router;

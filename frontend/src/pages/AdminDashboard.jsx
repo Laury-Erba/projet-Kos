@@ -5,7 +5,7 @@ import { Chart } from "react-google-charts";
 import {
   addProduct,
   updateProduct,
-  deleteProduct,
+  deleteProduct as deleteProductService,
 } from "../services/productService";
 import "../styles/pages/_dashboard.scss";
 
@@ -53,6 +53,15 @@ const AdminDashboard = () => {
     fetchProducts();
   }, [navigate]);
 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/produits");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des produits :", error);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -80,12 +89,16 @@ const AdminDashboard = () => {
 
     try {
       if (editMode) {
-        await updateProduct(editProductId, data);
+        console.log("Updating product with ID:", editProductId);
+        const response = await updateProduct(editProductId, data);
+        console.log("Update response:", response);
         alert("Produit mis à jour avec succès.");
         setEditMode(false);
         setEditProductId(null);
       } else {
-        await addProduct(data);
+        console.log("Adding new product");
+        const response = await addProduct(data);
+        console.log("Add response:", response);
         alert("Produit ajouté avec succès.");
       }
 
@@ -108,9 +121,10 @@ const AdminDashboard = () => {
 
   const deleteProduct = async (id) => {
     try {
-      await deleteProduct(id);
+      await deleteProductService(id);
       setProducts(products.filter((product) => product.ID_produit !== id));
       alert("Produit supprimé avec succès.");
+      fetchProducts(); // Refresh product list
     } catch (error) {
       console.error("Erreur lors de la suppression du produit :", error);
       alert("Erreur lors de la suppression du produit.");

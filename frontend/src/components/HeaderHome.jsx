@@ -11,7 +11,9 @@ const HeaderHome = () => {
       />
       <h1>Découvrez notre nouvelle collection Kos'</h1>
       <Link to="/shop">
-        <button className="shop-button">Shop Now</button>
+        <button className="shop-button" aria-label="Shop Now">
+          Shop Now
+        </button>
       </Link>
     </header>
   );

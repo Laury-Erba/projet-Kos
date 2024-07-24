@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -9,12 +8,12 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/AdminDashboard";
 import Cart from "./pages/Cart";
-import CheckoutForm from "./components/CheckoutForm"; // Assurez-vous d'importer votre composant CheckoutForm
+import CheckoutForm from "./components/CheckoutForm";
 import { CartProvider } from "./context/CartContext";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("your-publishable-key-here"); // Remplacez par votre clé publique
+const stripePromise = loadStripe("your-publishable-key-here");
 
 const App = () => {
   return (

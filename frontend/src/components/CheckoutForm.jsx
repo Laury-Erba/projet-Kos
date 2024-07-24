@@ -4,7 +4,7 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import "../styles/pages/_checkoutForm.scss"; // Assurez-vous que ce chemin est correct
+import "../styles/pages/_checkoutForm.scss";
 
 const CheckoutForm = () => {
   const stripe = useStripe();

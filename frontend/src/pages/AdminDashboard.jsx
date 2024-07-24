@@ -42,7 +42,11 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/produits");
+        const response = await axios.get("http://localhost:3001/api/produits", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         setProducts(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des produits :", error);
@@ -55,7 +59,11 @@ const AdminDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/produits");
+      const response = await axios.get("http://localhost:3001/api/produits", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setProducts(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des produits :", error);

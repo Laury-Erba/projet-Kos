@@ -17,7 +17,7 @@ const getAuthHeaders = () => {
 
 export const getProducts = async () => {
   try {
-    return await axiosInstance.get("/");
+    return await axiosInstance.get("/", getAuthHeaders());
   } catch (error) {
     handleError(error);
   }
@@ -25,7 +25,7 @@ export const getProducts = async () => {
 
 export const getProductById = async (id) => {
   try {
-    return await axiosInstance.get(`/${id}`);
+    return await axiosInstance.get(`/${id}`, getAuthHeaders());
   } catch (error) {
     handleError(error);
   }
@@ -36,6 +36,7 @@ export const addProduct = async (product) => {
     return await axiosInstance.post("/", product, {
       ...getAuthHeaders(),
       headers: {
+        ...getAuthHeaders().headers,
         "Content-Type": "multipart/form-data",
       },
     });
@@ -49,6 +50,7 @@ export const updateProduct = async (id, product) => {
     return await axiosInstance.put(`/${id}`, product, {
       ...getAuthHeaders(),
       headers: {
+        ...getAuthHeaders().headers,
         "Content-Type": "multipart/form-data",
       },
     });

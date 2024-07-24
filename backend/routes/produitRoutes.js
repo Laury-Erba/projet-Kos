@@ -29,20 +29,8 @@ const upload = multer({ storage: storage });
 
 router.get("/", getProducts); // Accessible à tous
 router.get("/:id", getProductById); // Accessible à tous
-router.post(
-  "/",
-  authenticateToken,
-  authorizeAdmin,
-  upload.single("image"),
-  addProduct
-); // Protégé
-router.put(
-  "/:id",
-  authenticateToken,
-  authorizeAdmin,
-  upload.single("image"),
-  updateProduct
-); // Protégé
-router.delete("/:id", authenticateToken, authorizeAdmin, deleteProduct); // Protégé
+router.post("/", authenticateToken, upload.single("image"), addProduct); // Protégé
+router.put("/:id", authenticateToken, upload.single("image"), updateProduct); // Protégé
+router.delete("/:id", authenticateToken, deleteProduct); // Protégé
 
 export default router;

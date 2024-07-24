@@ -23,7 +23,7 @@ export const loginUser = async (formData) => {
     const response = await axios.post(`${API_URL}/login`, formData);
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role); // Stocker le rôle
+      localStorage.setItem("role", response.data.role);
     }
     return response.data;
   } catch (error) {

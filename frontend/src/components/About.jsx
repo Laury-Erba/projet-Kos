@@ -29,10 +29,15 @@ const About = () => {
         </p>
       </div>
 
-      <img
-        src="/public/images/assiette-blanche.webp"
-        alt="belle ceramique blanche kos"
-      />
+      <figure>
+        <img
+          src="/public/images/assiette-blanche.webp"
+          alt="Assiette en céramique blanche de Kos"
+        />
+        <figcaption className="visually-hidden">
+          Assiette en céramique blanche de Kos
+        </figcaption>
+      </figure>
     </section>
   );
 };

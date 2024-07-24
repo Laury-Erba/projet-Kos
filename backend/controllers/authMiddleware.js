@@ -1,6 +1,6 @@
 // backend/controllers/authMiddleware.js
 import jwt from "jsonwebtoken";
-import { pool } from "../server.js"; // Assurez-vous que le pool est importé correctement
+import { pool } from "../server.js";
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];

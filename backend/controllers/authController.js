@@ -1,18 +1,7 @@
 // backend/controllers/authController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import mysql from "mysql2/promise";
-
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  port: 8889,
-  password: "root",
-  database: "Kos",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+import { pool } from "../server.js";
 
 // Fonction utilitaire pour générer un token JWT
 function generateToken(userData) {
@@ -20,7 +9,7 @@ function generateToken(userData) {
     {
       id: userData.ID,
       email: userData.Email,
-      role: userData.role,
+      Role: userData.Role,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
@@ -29,8 +18,7 @@ function generateToken(userData) {
 
 // Route POST pour l'inscription d'un utilisateur
 export const registerUser = async (req, res) => {
-  const { Nom, Prenom, Email, Mot_de_passe, Adresse_de_livraison, role } =
-    req.body;
+  const { Nom, Prenom, Email, Mot_de_passe, Adresse, Role } = req.body;
 
   try {
     const connection = await pool.getConnection();
@@ -51,8 +39,8 @@ export const registerUser = async (req, res) => {
 
     // Insertion du nouvel utilisateur dans la base de données
     const [result] = await connection.query(
-      "INSERT INTO Users (Nom, Prenom, Email, Mot_de_passe, Adresse_de_livraison, role) VALUES (?, ?, ?, ?, ?, ?)",
-      [Nom, Prenom, Email, hashedPassword, Adresse_de_livraison, role]
+      "INSERT INTO Users (Nom, Prenom, Email, Mot_de_passe, Adresse, Role) VALUES (?, ?, ?, ?, ?, ?)",
+      [Nom, Prenom, Email, hashedPassword, Adresse, Role]
     );
 
     connection.release();

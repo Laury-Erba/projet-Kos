@@ -76,9 +76,9 @@ const Register = () => {
       <input
         className="form-input"
         type="text"
-        name="Adresse_de_livraison"
-        placeholder="Adresse de livraison"
-        value={formData.Adresse_de_livraison}
+        name="Adresse"
+        placeholder="Adresse"
+        value={formData.Adresse}
         onChange={handleChange}
         required
       />

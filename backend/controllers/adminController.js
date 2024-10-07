@@ -1,5 +1,4 @@
 // backend/controllers/adminController.js
-import mysql from "mysql2/promise";
 import { pool } from "../server.js";
 
 // Fonction pour obtenir les informations de l'utilisateur admin

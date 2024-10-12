@@ -1,15 +1,5 @@
 import mysql from "mysql2/promise";
-
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  port: 8889,
-  password: "root",
-  database: "Kos",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+import { pool } from "../server.js";
 
 // Récupérer tous les produits
 export const getProducts = async (req, res) => {

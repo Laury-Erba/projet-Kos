@@ -36,7 +36,7 @@ const ProductList = () => {
         {products.map((product) => (
           <li key={product.ID_produit}>
             <img
-              src={`http://localhost:3001/images/${product.image}`}
+              src={`http://localhost:3001/images/${product.Image}`}
               alt={product.Nom}
               style={{ width: "100px", height: "100px" }}
             />

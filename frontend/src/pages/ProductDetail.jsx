@@ -31,7 +31,7 @@ const ProductDetail = () => {
       <div className="product-detail">
         <h2>{product.Nom}</h2>
         <img
-          src={`http://localhost:3001/images/${product.image}`}
+          src={`http://localhost:3001/Images/${product.Image}`}
           alt={product.Nom}
           style={{ width: "200px", height: "200px" }}
         />

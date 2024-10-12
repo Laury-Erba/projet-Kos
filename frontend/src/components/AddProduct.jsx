@@ -11,7 +11,7 @@ const Dashboard = () => {
     Description: "",
     Prix: "",
     Stock: "",
-    image: null,
+    Image: null,
   });
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      image: e.target.files[0],
+      Image: e.target.files[0],
     }));
   };
 
@@ -68,7 +68,7 @@ const Dashboard = () => {
     data.append("Description", formData.Description);
     data.append("Prix", formData.Prix);
     data.append("Stock", formData.Stock);
-    data.append("image", formData.image);
+    data.append("Image", formData.Image);
 
     try {
       await axios.post("http://localhost:3001/api/produits", data, {
@@ -82,7 +82,7 @@ const Dashboard = () => {
         Description: "",
         Prix: "",
         Stock: "",
-        image: null,
+        Image: null,
       });
       fetchProducts(); // Refresh product list
     } catch (error) {
@@ -194,7 +194,7 @@ const Dashboard = () => {
               <label>Image</label>
               <input
                 type="file"
-                name="image"
+                name="Image"
                 onChange={handleFileChange}
                 required
               />
@@ -210,7 +210,7 @@ const Dashboard = () => {
             {products.map((product) => (
               <li key={product.ID_produit}>
                 <img
-                  src={`http://localhost:3001/images/${product.image}`}
+                  src={`http://localhost:3001/Images/${product.Image}`}
                   alt={product.Nom}
                   style={{ width: "100px", height: "100px" }}
                 />

@@ -1,6 +1,7 @@
+// produitRoutes.js
 import express from "express";
-import multer from "multer";
-import path from "path";
+import { upload } from "../upload.js";
+const router = express.Router();
 import {
   getProducts,
   getProductById,
@@ -13,24 +14,28 @@ import {
   authorizeAdmin,
 } from "../controllers/authMiddleware.js";
 
-const router = express.Router();
-
-// Configuration de multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage: storage });
-
 router.get("/", getProducts); // Accessible à tous
 router.get("/:id", getProductById); // Accessible à tous
-router.post("/", authenticateToken, upload.single("image"), addProduct); // Protégé
-router.put("/:id", authenticateToken, upload.single("image"), updateProduct); // Protégé
-router.delete("/:id", authenticateToken, deleteProduct); // Protégé
+
+// Pour ajouter un produit (protégé par authentification et autorisation admin)
+router.post(
+  "/",
+  authenticateToken,
+  authorizeAdmin,
+  upload.single("image"), // Utilisation de 'upload' importé de server.js
+  addProduct
+);
+
+// Pour mettre à jour un produit (protégé par authentification et autorisation admin)
+router.put(
+  "/:id",
+  authenticateToken,
+  authorizeAdmin,
+  upload.single("Image"), // Utilisation de 'upload' importé de server.js
+  updateProduct
+);
+
+// Pour supprimer un produit (protégé par authentification et autorisation admin)
+router.delete("/:id", authenticateToken, authorizeAdmin, deleteProduct);
 
 export default router;

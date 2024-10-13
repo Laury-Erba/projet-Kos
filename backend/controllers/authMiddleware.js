@@ -1,4 +1,3 @@
-// backend/controllers/authMiddleware.js
 import jwt from "jsonwebtoken";
 import { pool } from "../server.js";
 
@@ -15,6 +14,7 @@ export const authenticateToken = (req, res, next) => {
   });
 };
 
+// Vérifie si l'utilisateur est un admin
 export const authorizeAdmin = async (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -23,15 +23,15 @@ export const authorizeAdmin = async (req, res, next) => {
   try {
     const connection = await pool.getConnection();
     const [rows] = await connection.query(
-      "SELECT role FROM Users WHERE ID = ?",
-      [req.user.id]
+      "SELECT role FROM Users WHERE ID_utilisateur = ?",
+      [req.user.ID_utilisateur]
     );
     connection.release();
 
     if (rows.length > 0 && rows[0].role === "admin") {
       next();
     } else {
-      res.status(403).json({ message: "Forbidden" });
+      res.status(403).json({ message: "Access denied, admin only." });
     }
   } catch (error) {
     console.error("Error authorizing admin:", error);

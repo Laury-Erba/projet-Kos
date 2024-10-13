@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 
 export const registerUser = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, formData);
+    const response = await axiosInstance.post(`${API_URL}/register`, formData);
     return response.data;
   } catch (error) {
     handleError(error);
@@ -20,7 +20,7 @@ export const registerUser = async (formData) => {
 
 export const loginUser = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, formData);
+    const response = await axiosInstance.post(`${API_URL}/login`, formData);
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);

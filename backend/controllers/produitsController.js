@@ -46,8 +46,8 @@ export const addProduct = async (req, res) => {
   try {
     const connection = await pool.getConnection();
     await connection.query(
-      "INSERT INTO Produits (Nom, Description, Prix, Stock, image) VALUES (?, ?, ?, ?, ?)",
-      [Nom, Description, Prix, Stock, image]
+      "INSERT INTO Produits (Nom, Description, Prix, Image, Stock) VALUES (?, ?, ?, ?, ?)",
+      [Nom, Description, Prix, Image, Stock]
     );
     connection.release();
     res.status(201).json({ message: "Produit ajouté avec succès." });
@@ -67,7 +67,7 @@ export const updateProduct = async (req, res) => {
   try {
     const connection = await pool.getConnection();
     await connection.query(
-      "UPDATE produits SET Nom = ?, Description = ?, Prix = ?, Stock = ?, image = ? WHERE ID_produit = ?",
+      "UPDATE produits SET Nom = ?, Description = ?, Prix = ?, Image = ?, Stock = ? WHERE ID_produit = ?",
       [Nom, Description, Prix, Stock, image, id]
     );
     connection.release();

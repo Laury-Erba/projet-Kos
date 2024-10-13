@@ -33,7 +33,14 @@ const AdminDashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setUserData(response.data);
+        const userRole = response.data.role;
+        if (userRole === "client") {
+          navigate("/clientDashboard");
+        } else if (userRole === "admin") {
+          setUserData(response.data);
+        } else {
+          navigate("/login");
+        }
       } catch (error) {
         console.error("Error fetching user data", error);
         navigate("/login");
@@ -57,17 +64,9 @@ const AdminDashboard = () => {
     fetchProducts();
   }, [navigate]);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get("http://localhost:3001/api/produits", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setProducts(response.data);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des produits :", error);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const handleChange = (e) => {
@@ -97,16 +96,12 @@ const AdminDashboard = () => {
 
     try {
       if (editMode) {
-        console.log("Updating product with ID:", editProductId);
-        const response = await updateProduct(editProductId, data);
-        console.log("Update response:", response);
+        await updateProduct(editProductId, data);
         alert("Produit mis à jour avec succès.");
         setEditMode(false);
         setEditProductId(null);
       } else {
-        console.log("Adding new product");
-        const response = await addProduct(data);
-        console.log("Add response:", response);
+        await addProduct(data);
         alert("Produit ajouté avec succès.");
       }
 
@@ -117,7 +112,7 @@ const AdminDashboard = () => {
         Stock: "",
         image: null,
       });
-      fetchProducts(); // Refresh product list
+      fetchProducts();
     } catch (error) {
       console.error(
         "Erreur lors de l'ajout ou de la mise à jour du produit :",
@@ -132,7 +127,7 @@ const AdminDashboard = () => {
       await deleteProductService(id);
       setProducts(products.filter((product) => product.ID_produit !== id));
       alert("Produit supprimé avec succès.");
-      fetchProducts(); // Refresh product list
+      fetchProducts();
     } catch (error) {
       console.error("Erreur lors de la suppression du produit :", error);
       alert("Erreur lors de la suppression du produit.");
@@ -147,7 +142,7 @@ const AdminDashboard = () => {
       Description: product.Description,
       Prix: product.Prix,
       Stock: product.Stock,
-      image: null, // Reset image field as we don't have the actual image file
+      image: null,
     });
   };
 
@@ -156,7 +151,7 @@ const AdminDashboard = () => {
   }
 
   const data = [
-    ["VAISELLES", "Hours per Day"],
+    ["VAISELLES", "Sales"],
     ["VASE", 11],
     ["TASSES EN CÉRAMIQUE", 2],
     ["POT", 2],
@@ -173,12 +168,14 @@ const AdminDashboard = () => {
   return (
     <div className="dashboard-container mt-5">
       <h1>Admin Dashboard</h1>
+      <button onClick={handleLogout}>Déconnexion</button>
+
       <div className="card-row">
         <div className="card">
           <div className="card-body">
             <h5 className="card-title">User Information</h5>
             <p className="card-text">
-              <strong>Name:</strong> {userData.Nom} {userData.Prenom}
+              <strong>Nom:</strong> {userData.Nom} {userData.Prenom}
             </p>
             <p className="card-text">
               <strong>Email:</strong> {userData.Email}
@@ -198,6 +195,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
       <div className="card-row">
         <div className="card">
           <div className="card-body">
@@ -254,6 +252,7 @@ const AdminDashboard = () => {
             </form>
           </div>
         </div>
+
         <div className="card">
           <div className="card-body">
             <h5 className="card-title">Liste des Produits</h5>

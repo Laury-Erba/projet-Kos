@@ -11,7 +11,10 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
 import cors from "cors";
-import { authenticateToken } from "./controllers/authMiddleware.js";
+import {
+  authenticateToken,
+  authorizeAdmin,
+} from "./controllers/authMiddleware.js"; // Import des middlewares
 import adminRoutes from "./routes/adminRoutes.js";
 
 // Configuration des variables d'environnement
@@ -56,13 +59,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(cors()); // Configuration CORS
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-// Utilisation des routes
+// Utilisation des routes API
 app.use("/api/produits", produitRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/admin", authenticateToken, adminRoutes);
 
-// Gestion des fichiers statiques pour le frontend
+// Route protégée par le middleware `authenticateToken` pour vérifier si l'utilisateur est admin
+app.use("/api/admin", authenticateToken, authorizeAdmin, adminRoutes);
+
+// Gestion des fichiers statiques pour le frontend (doit être après les routes API)
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));

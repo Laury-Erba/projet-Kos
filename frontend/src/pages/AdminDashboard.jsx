@@ -23,67 +23,52 @@ const AdminDashboard = () => {
   const [editProductId, setEditProductId] = useState(null);
   const navigate = useNavigate();
 
-  // Récupération des données utilisateur
-  useEffect(() => {
-    let isMounted = true;
+  // Fonction pour récupérer les produits
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/produits");
+      setProducts(response.data); // Mettre à jour l'état des produits avec les données reçues
+    } catch (error) {
+      console.error("Erreur lors de la récupération des produits", error);
+    }
+  };
 
+  // useEffect pour récupérer les données de l'utilisateur admin
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
           "http://localhost:3001/api/admin/user",
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         console.log("Réponse API admin:", response.data);
 
-        // Vérification du rôle utilisateur
-        if (isMounted) {
-          if (response.data.user && response.data.user.Role === "admin") {
-            setUserData(response.data.user);
-          } else {
-            navigate("/login");
-          }
+        if (response.data.user && response.data.user.Role === "admin") {
+          setUserData(response.data.user);
+          fetchProducts(); // Récupérer les produits après la connexion
+        } else {
+          navigate("/login");
         }
       } catch (error) {
         console.error("Error fetching user data", error);
-        if (isMounted) {
-          navigate("/login");
-        }
-      }
-    };
-
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/api/produits", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des produits :", error);
+        navigate("/login");
       }
     };
 
     fetchUserData();
-    fetchProducts();
-
-    // Nettoyage pour éviter les mises à jour sur un composant démonté
-    return () => {
-      isMounted = false;
-    };
   }, [navigate]);
 
-  // Gestion de la déconnexion
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  // Gestion des modifications dans le formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -92,7 +77,6 @@ const AdminDashboard = () => {
     }));
   };
 
-  // Gestion du changement d'image
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -100,7 +84,6 @@ const AdminDashboard = () => {
     }));
   };
 
-  // Gestion de l'ajout et de la mise à jour des produits
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -109,9 +92,11 @@ const AdminDashboard = () => {
     data.append("Description", formData.Description);
     data.append("Prix", formData.Prix);
     data.append("Stock", formData.Stock);
-    data.append("image", formData.image);
 
-    console.log("Données soumises :", formData);
+    // Ajouter l'image uniquement si une nouvelle image a été sélectionnée
+    if (formData.image) {
+      data.append("image", formData.image);
+    }
 
     try {
       if (editMode) {
@@ -141,20 +126,18 @@ const AdminDashboard = () => {
     }
   };
 
-  // Gestion de la suppression des produits
   const deleteProduct = async (id) => {
     try {
       await deleteProductService(id);
       setProducts(products.filter((product) => product.ID_produit !== id));
       alert("Produit supprimé avec succès.");
-      fetchProducts();
+      fetchProducts(); // Récupérer les produits après suppression
     } catch (error) {
       console.error("Erreur lors de la suppression du produit :", error);
       alert("Erreur lors de la suppression du produit.");
     }
   };
 
-  // Gestion de la modification d'un produit
   const editProduct = (product) => {
     setEditMode(true);
     setEditProductId(product.ID_produit);
@@ -281,7 +264,7 @@ const AdminDashboard = () => {
               {products.map((product) => (
                 <li key={product.ID_produit}>
                   <img
-                    src={`http://localhost:3001/images/${product.image}`}
+                    src={`http://localhost:3001/images/${product.Image}`} // Assure-toi que le nom de la colonne est correct
                     alt={product.Nom}
                     style={{ width: "100px", height: "100px" }}
                   />

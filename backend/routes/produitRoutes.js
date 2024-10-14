@@ -31,7 +31,7 @@ router.put(
   "/:id",
   authenticateToken,
   authorizeAdmin,
-  upload.single("Image"), // Utilisation de 'upload' importé de server.js
+  upload.single("image"), // Utilisation de 'upload' importé de server.js
   updateProduct
 );
 

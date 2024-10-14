@@ -5,7 +5,8 @@ import { Chart } from "react-google-charts";
 import "../styles/pages/_dashboard.scss";
 
 const ClientDashboard = () => {
-  const [userData, setUserData] = useState(null);
+  // Initialiser userData avec un objet vide au lieu de null
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +20,8 @@ const ClientDashboard = () => {
           }
         );
 
-        if (response.data.role !== "client") {
-          navigate("/login"); // Redirige si l'utilisateur n'est pas un client
+        if (response.data.Role !== "client") {
+          navigate("/client/dashboard"); // Redirige si l'utilisateur n'est pas un client
         } else {
           setUserData(response.data); // Assure-toi que `response.data` contient les bonnes données
         }
@@ -33,10 +34,7 @@ const ClientDashboard = () => {
     fetchUserData();
   }, [navigate]);
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
-
+  // Données pour le graphique
   const data = [
     ["VAISELLES", "Hours per Day"],
     ["VASE", 11],
@@ -52,6 +50,7 @@ const ClientDashboard = () => {
     is3D: false,
   };
 
+  // Afficher directement le formulaire même si les données utilisateur ne sont pas encore là
   return (
     <div className="dashboard-container mt-5">
       <h1>Client Dashboard</h1>
@@ -59,10 +58,10 @@ const ClientDashboard = () => {
         <div className="card-body">
           <h5 className="card-title">User Information</h5>
           <p className="card-text">
-            <strong>Nom:</strong> {userData.Nom} {userData.Prenom}
+            <strong>Nom:</strong> {userData.Nom || "Chargement..."}
           </p>
           <p className="card-text">
-            <strong>Email:</strong> {userData.Email}
+            <strong>Email:</strong> {userData.Email || "Chargement..."}
           </p>
         </div>
       </div>

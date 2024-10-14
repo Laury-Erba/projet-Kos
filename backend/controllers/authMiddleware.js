@@ -14,27 +14,21 @@ export const authenticateToken = (req, res, next) => {
   });
 };
 
-// Vérifie si l'utilisateur est un admin
-export const authorizeAdmin = async (req, res, next) => {
+export const authorizeAdmin = (req, res, next) => {
   if (!req.user) {
+    console.log("Utilisateur non authentifié");
     return res.status(401).json({ message: "Non autorisé" });
   }
 
-  try {
-    const connection = await pool.getConnection();
-    const [rows] = await connection.query(
-      "SELECT Role FROM Users WHERE ID = ?",
-      [req.user.id]
-    );
-    connection.release();
+  console.log("Vérification du rôle de l'utilisateur :", req.user.Role);
 
-    if (rows.length > 0 && rows[0].Role === "admin") {
-      next();
-    } else {
-      res.status(403).json({ message: "Accès refusé, réservé aux admins." });
-    }
-  } catch (error) {
-    console.error("Erreur lors de l'autorisation admin :", error);
-    res.status(500).json({ message: "Erreur serveur" });
+  if (req.user.Role !== "admin") {
+    console.log("Accès refusé. Rôle actuel :", req.user.Role);
+    return res
+      .status(403)
+      .json({ message: "Accès refusé : administrateurs uniquement" });
   }
+
+  console.log("Accès autorisé pour l'utilisateur admin.");
+  next();
 };

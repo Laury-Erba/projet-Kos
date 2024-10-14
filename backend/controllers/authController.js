@@ -6,9 +6,9 @@ import { pool } from "../server.js";
 function generateToken(userData) {
   return jwt.sign(
     {
-      id: userData.ID,
+      id: userData.ID_utilisateur, // Vérifie que c'est bien l'ID utilisateur
       email: userData.Email,
-      Role: userData.Role,
+      Role: userData.Role, // Vérifie que le rôle est bien "admin" ou "client"
     },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }

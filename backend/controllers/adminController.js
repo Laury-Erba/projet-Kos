@@ -1,33 +1,46 @@
 import { pool } from "../server.js";
 
-// Route pour récupérer les informations d'un utilisateur admin
-app.get("/api/admin/user", authenticateToken, async (req, res) => {
+export const getAdminUser = async (req, res) => {
+  const { id } = req.user; // Assurez-vous que req.user contient l'ID utilisateur
+  console.log("ID utilisateur récupéré pour admin:", id); // Vérifie l'ID utilisateur
+
   try {
-    const userId = req.user.id;
-    const [user] = await pool.query("SELECT * FROM Users WHERE ID = ?", [
-      userId,
-    ]);
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query(
+      "SELECT * FROM Users WHERE ID_utilisateur = ?",
+      [id]
+    );
+    console.log("Résultat SQL:", rows); // Ajoute un log pour voir le résultat de la requête SQL
+    connection.release();
 
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    if (rows.length > 0) {
+      const user = rows[0];
+      res.json({
+        user: {
+          Role: user.Role,
+          Email: user.Email,
+          Nom: user.Nom,
+          Prenom: user.Prenom,
+        },
+      });
+    } else {
+      res.status(404).json({ message: "Utilisateur non trouvé." });
     }
-
-    if (user.Role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "Accès refusé : vous n'êtes pas administrateur" });
-    }
-
-    res.json({ user });
   } catch (error) {
-    console.error("Erreur lors de la récupération des données admin :", error);
-    res.status(500).json({ message: "Erreur serveur" });
+    console.error(
+      "Erreur lors de la récupération de l'utilisateur admin :",
+      error
+    );
+    res.status(500).json({
+      message: "Erreur serveur lors de la récupération de l'utilisateur admin.",
+    });
   }
-});
+};
 
 // Mettre à jour le rôle d'un utilisateur
 export const updateUserRole = async (req, res) => {
-  const { userId, Role } = req.body;
+  const { Role } = req.body; // Le nouveau rôle est envoyé dans le body de la requête
+  const userId = req.params.id; // L'ID de l'utilisateur est envoyé dans l'URL
 
   try {
     const connection = await pool.getConnection();

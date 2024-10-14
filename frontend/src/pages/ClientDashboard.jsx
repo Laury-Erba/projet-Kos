@@ -13,12 +13,17 @@ const ClientDashboard = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:3001/api/admin/user",
+          "http://localhost:3001/api/client/user", // Remplacer par le bon endpoint
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setUserData(response.data);
+
+        if (response.data.role !== "client") {
+          navigate("/login"); // Redirige si l'utilisateur n'est pas un client
+        } else {
+          setUserData(response.data); // Assure-toi que `response.data` contient les bonnes données
+        }
       } catch (error) {
         console.error("Error fetching user data", error);
         navigate("/login");
@@ -54,7 +59,7 @@ const ClientDashboard = () => {
         <div className="card-body">
           <h5 className="card-title">User Information</h5>
           <p className="card-text">
-            <strong>Name:</strong> {userData.Nom} {userData.Prenom}
+            <strong>Nom:</strong> {userData.Nom} {userData.Prenom}
           </p>
           <p className="card-text">
             <strong>Email:</strong> {userData.Email}

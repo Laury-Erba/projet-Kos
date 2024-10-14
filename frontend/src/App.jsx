@@ -6,7 +6,8 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Dashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 import Cart from "./pages/Cart";
 import CheckoutForm from "./components/CheckoutForm";
 import { CartProvider } from "./context/CartContext";
@@ -26,7 +27,8 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/client/dashboard" element={<ClientDashboard />} />
           <Route
             path="/checkout"
             element={

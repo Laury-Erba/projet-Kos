@@ -23,7 +23,10 @@ const AdminDashboard = () => {
   const [editProductId, setEditProductId] = useState(null);
   const navigate = useNavigate();
 
+  // Récupération des données utilisateur
   useEffect(() => {
+    let isMounted = true;
+
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -33,17 +36,22 @@ const AdminDashboard = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        const userRole = response.data.role;
-        if (userRole === "client") {
-          navigate("/clientDashboard");
-        } else if (userRole === "admin") {
-          setUserData(response.data);
-        } else {
-          navigate("/login");
+
+        console.log("Réponse API admin:", response.data);
+
+        // Vérification du rôle utilisateur
+        if (isMounted) {
+          if (response.data.user && response.data.user.Role === "admin") {
+            setUserData(response.data.user);
+          } else {
+            navigate("/login");
+          }
         }
       } catch (error) {
         console.error("Error fetching user data", error);
-        navigate("/login");
+        if (isMounted) {
+          navigate("/login");
+        }
       }
     };
 
@@ -62,13 +70,20 @@ const AdminDashboard = () => {
 
     fetchUserData();
     fetchProducts();
+
+    // Nettoyage pour éviter les mises à jour sur un composant démonté
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
+  // Gestion de la déconnexion
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
+  // Gestion des modifications dans le formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -77,6 +92,7 @@ const AdminDashboard = () => {
     }));
   };
 
+  // Gestion du changement d'image
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -84,6 +100,7 @@ const AdminDashboard = () => {
     }));
   };
 
+  // Gestion de l'ajout et de la mise à jour des produits
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -93,6 +110,8 @@ const AdminDashboard = () => {
     data.append("Prix", formData.Prix);
     data.append("Stock", formData.Stock);
     data.append("image", formData.image);
+
+    console.log("Données soumises :", formData);
 
     try {
       if (editMode) {
@@ -122,6 +141,7 @@ const AdminDashboard = () => {
     }
   };
 
+  // Gestion de la suppression des produits
   const deleteProduct = async (id) => {
     try {
       await deleteProductService(id);
@@ -134,6 +154,7 @@ const AdminDashboard = () => {
     }
   };
 
+  // Gestion de la modification d'un produit
   const editProduct = (product) => {
     setEditMode(true);
     setEditProductId(product.ID_produit);
@@ -150,7 +171,7 @@ const AdminDashboard = () => {
     return <div>Loading...</div>;
   }
 
-  const data = [
+  const chartData = [
     ["VAISELLES", "Sales"],
     ["VASE", 11],
     ["TASSES EN CÉRAMIQUE", 2],
@@ -159,7 +180,7 @@ const AdminDashboard = () => {
     ["AUTRES", 7],
   ];
 
-  const options = {
+  const chartOptions = {
     title: "Ventes KOS'",
     pieHole: 0.4,
     is3D: false,
@@ -187,8 +208,8 @@ const AdminDashboard = () => {
             <h5 className="card-title">Ventes KOS'</h5>
             <Chart
               chartType="PieChart"
-              data={data}
-              options={options}
+              data={chartData}
+              options={chartOptions}
               width="100%"
               height="400px"
             />

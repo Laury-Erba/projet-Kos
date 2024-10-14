@@ -9,9 +9,10 @@ const Register = () => {
     Prenom: "",
     Email: "",
     Mot_de_passe: "",
-    Adresse_de_livraison: "",
-    role: "client", // Par défaut, rôle client
+    Adresse: "",
+    Role: "client", // Par défaut, rôle utilisateur
   });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,22 +24,19 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await registerUser(formData);
-      console.log("Register response:", response); // Ajoutez cette ligne
-      alert("Inscription réussie");
-      navigate("/login"); // Rediriger vers la page de connexion
+      await registerUser(formData);
+      navigate("/login");
     } catch (error) {
-      console.error("Erreur lors de l'inscription :", error);
-      alert("Erreur lors de l'inscription");
+      console.error("Erreur lors de l'inscription :", error.message);
     }
   };
 
   return (
-    <form className="register-form" onSubmit={handleSubmit}>
-      <h2 className="form-title">Inscription</h2>
+    <form onSubmit={handleSubmit} className="register-form">
+      <h2>Inscription</h2>
       <input
-        className="form-input"
         type="text"
         name="Nom"
         placeholder="Nom"
@@ -47,16 +45,14 @@ const Register = () => {
         required
       />
       <input
-        className="form-input"
         type="text"
         name="Prenom"
-        placeholder="Prenom"
+        placeholder="Prénom"
         value={formData.Prenom}
         onChange={handleChange}
         required
       />
       <input
-        className="form-input"
         type="email"
         name="Email"
         placeholder="Email"
@@ -65,7 +61,6 @@ const Register = () => {
         required
       />
       <input
-        className="form-input"
         type="password"
         name="Mot_de_passe"
         placeholder="Mot de passe"
@@ -74,7 +69,6 @@ const Register = () => {
         required
       />
       <input
-        className="form-input"
         type="text"
         name="Adresse"
         placeholder="Adresse"
@@ -82,10 +76,11 @@ const Register = () => {
         onChange={handleChange}
         required
       />
-      <input type="hidden" name="role" value={formData.role} />
-      <button className="form-button" type="submit">
-        S'inscrire
-      </button>
+      <select name="Role" onChange={handleChange} value={formData.Role}>
+        <option value="client">Utilisateur</option>
+        <option value="admin">Administrateur</option>
+      </select>
+      <button type="submit">S'inscrire</button>
     </form>
   );
 };

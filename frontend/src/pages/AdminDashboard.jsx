@@ -21,15 +21,38 @@ const AdminDashboard = () => {
   });
   const [editMode, setEditMode] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState({});
   const navigate = useNavigate();
 
   // Fonction pour récupérer les produits
   const fetchProducts = async () => {
     try {
       const response = await axios.get("http://localhost:3001/api/produits");
-      setProducts(response.data); // Mettre à jour l'état des produits avec les données reçues
+      setProducts(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des produits", error);
+    }
+  };
+
+  // Fonction pour récupérer la liste des utilisateurs
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "http://localhost:3001/api/admin/users",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setUsers(response.data);
+      const rolesMap = response.data.reduce((acc, user) => {
+        acc[user.ID_utilisateur] = user.Role;
+        return acc;
+      }, {});
+      setRoles(rolesMap); // Met à jour les rôles pour chaque utilisateur
+    } catch (error) {
+      console.error("Erreur lors de la récupération des utilisateurs", error);
     }
   };
 
@@ -52,6 +75,7 @@ const AdminDashboard = () => {
         if (response.data.user && response.data.user.Role === "admin") {
           setUserData(response.data.user);
           fetchProducts(); // Récupérer les produits après la connexion
+          fetchUsers(); // Récupérer les utilisateurs après la connexion
         } else {
           navigate("/login");
         }
@@ -131,7 +155,7 @@ const AdminDashboard = () => {
       await deleteProductService(id);
       setProducts(products.filter((product) => product.ID_produit !== id));
       alert("Produit supprimé avec succès.");
-      fetchProducts(); // Récupérer les produits après suppression
+      fetchProducts();
     } catch (error) {
       console.error("Erreur lors de la suppression du produit :", error);
       alert("Erreur lors de la suppression du produit.");
@@ -148,6 +172,31 @@ const AdminDashboard = () => {
       Stock: product.Stock,
       image: null,
     });
+  };
+
+  // Gestion de la mise à jour du rôle de l'utilisateur
+  const handleRoleChange = (userId, role) => {
+    setRoles((prevRoles) => ({
+      ...prevRoles,
+      [userId]: role,
+    }));
+  };
+
+  const updateRole = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `http://localhost:3001/api/admin/users/${userId}`,
+        { Role: roles[userId] },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert("Rôle mis à jour avec succès.");
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du rôle", error);
+      alert("Erreur lors de la mise à jour du rôle.");
+    }
   };
 
   if (!userData) {
@@ -200,6 +249,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+      {/* Gestion des produits */}
       <div className="card-row">
         <div className="card">
           <div className="card-body">
@@ -264,7 +314,7 @@ const AdminDashboard = () => {
               {products.map((product) => (
                 <li key={product.ID_produit}>
                   <img
-                    src={`http://localhost:3001/images/${product.Image}`} // Assure-toi que le nom de la colonne est correct
+                    src={`http://localhost:3001/images/${product.Image}`}
                     alt={product.Nom}
                     style={{ width: "100px", height: "100px" }}
                   />
@@ -280,6 +330,37 @@ const AdminDashboard = () => {
               ))}
             </ul>
           </div>
+        </div>
+      </div>
+
+      {/* Gestion des utilisateurs */}
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">Liste des Utilisateurs</h5>
+          <ul>
+            {users.map((user) => (
+              <li key={user.ID_utilisateur}>
+                <h3>
+                  {user.Nom} {user.Prenom}
+                </h3>
+                <p>Rôle actuel : {user.Role}</p>
+                <div className="role-select">
+                  <select
+                    value={roles[user.ID_utilisateur]}
+                    onChange={(e) =>
+                      handleRoleChange(user.ID_utilisateur, e.target.value)
+                    }
+                  >
+                    <option value="admin">Admin</option>
+                    <option value="client">Client</option>
+                  </select>
+                  <button onClick={() => updateRole(user.ID_utilisateur)}>
+                    Mettre à jour
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
